@@ -29,6 +29,11 @@ public sealed class ShapeDragItem : MonoBehaviour,
     [Header("Press Lift")]
     public float pressLiftY = 24f;
 
+    [Header("Ghost Lift Animation")]
+    public bool animateGhostLift = true;
+    public float ghostLiftDuration = 0.15f;
+    public AnimationCurve ghostLiftCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+
     [Header("Combo Popup")]
     public PopupManager Popup;
     public Vector2 comboOffset = new Vector2(0f, 36f);
@@ -46,6 +51,7 @@ public sealed class ShapeDragItem : MonoBehaviour,
     private Vector2 _runtimeExtraOffset = Vector2.zero;
     private Vector2 _cursorOffsetScreen;
     private bool _gameOverTriggered = false;
+    private Coroutine _ghostAnimRoutine;
 
     private void Awake()
     {
@@ -90,11 +96,19 @@ public sealed class ShapeDragItem : MonoBehaviour,
         CreateGhostIfNeeded(spriteForGhost);
 
         RectTransformUtility.ScreenPointToLocalPointInRectangle(
-            dragRoot, eventData.position, _cam, out var startLocal);
+            dragRoot, eventData.position, _cam, out var pointerLocal);
 
         AudioManager.Instance?.PlayPickup();
 
-        _ghostRT.anchoredPosition = startLocal + _grabOffsetLocal + _runtimeExtraOffset;
+        if (animateGhostLift)
+        {
+            StartGhostLiftAnimation(pointerLocal);
+        }
+        else
+        {
+            _ghostRT.anchoredPosition = pointerLocal + _grabOffsetLocal + _runtimeExtraOffset;
+        }
+
         RecomputeCursorOffsetScreen();
         _cg.alpha = 0f;
     }
@@ -103,6 +117,12 @@ public sealed class ShapeDragItem : MonoBehaviour,
     {
         if (!_isDragging)
         {
+            if (_ghostAnimRoutine != null)
+            {
+                StopCoroutine(_ghostAnimRoutine);
+                _ghostAnimRoutine = null;
+            }
+
             if (_ghostRT) Destroy(_ghostRT.gameObject);
             _ghostRT = null;
             _ghostView = null;
@@ -131,12 +151,19 @@ public sealed class ShapeDragItem : MonoBehaviour,
         _isDragging = true;
         _cg.blocksRaycasts = false;
 
+        if (_ghostAnimRoutine != null)
+        {
+            StopCoroutine(_ghostAnimRoutine);
+            _ghostAnimRoutine = null;
+        }
+
         if (_ghostRT == null)
         {
             _anchorFixLocal = ComputeTopLeftFixLocal(_draggingData);
             _grabOffsetLocal = ghostOffsetLocal;
             var spriteForGhost = skinProvider ? skinProvider.GetTileSprite(_variantIndex) : board.placedSpriteFallback;
             CreateGhostIfNeeded(spriteForGhost);
+
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
                 dragRoot, eventData.position, _cam, out var startLocal);
             _ghostRT.anchoredPosition = startLocal + _grabOffsetLocal + _runtimeExtraOffset;
@@ -154,7 +181,11 @@ public sealed class ShapeDragItem : MonoBehaviour,
 
         _ghostRT.anchoredPosition = local + TotalLocalOffset;
 
-        if (_draggingData == null) { board.ClearPreview(); return; }
+        if (_draggingData == null)
+        {
+            board.ClearPreview();
+            return;
+        }
 
         var screenPosWithOffset = eventData.position + _cursorOffsetScreen;
 
@@ -184,6 +215,12 @@ public sealed class ShapeDragItem : MonoBehaviour,
         _isDragging = false;
         _cg.blocksRaycasts = true;
         _cg.alpha = 1f;
+
+        if (_ghostAnimRoutine != null)
+        {
+            StopCoroutine(_ghostAnimRoutine);
+            _ghostAnimRoutine = null;
+        }
 
         board.ClearPreview();
         if (_draggingData == null)
@@ -367,8 +404,15 @@ public sealed class ShapeDragItem : MonoBehaviour,
 
     private void CleanupAfterDrop()
     {
+        if (_ghostAnimRoutine != null)
+        {
+            StopCoroutine(_ghostAnimRoutine);
+            _ghostAnimRoutine = null;
+        }
+
         if (_ghostRT) Destroy(_ghostRT.gameObject);
-        _ghostRT = null; _ghostView = null;
+        _ghostRT = null;
+        _ghostView = null;
         _draggingData = null;
         _runtimeExtraOffset = Vector2.zero;
         _cg.alpha = 1f;
@@ -435,5 +479,72 @@ public sealed class ShapeDragItem : MonoBehaviour,
             for (int c = 0; c < s.columns; c++)
                 if (s.board[r].column[c]) n++;
         return n;
+    }
+
+    private void StartGhostLiftAnimation(Vector2 pointerLocal)
+    {
+        if (_ghostRT == null || dragRoot == null) return;
+
+        var selfRT = transform as RectTransform;
+        if (selfRT == null) return;
+
+        Vector2 selfScreen = RectTransformUtility.WorldToScreenPoint(_cam, selfRT.position);
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(
+            dragRoot, selfScreen, _cam, out var startLocalPos);
+
+        Vector2 targetLocalPos = pointerLocal + _grabOffsetLocal + _runtimeExtraOffset;
+
+        float startScale = 1f;
+        float endScale = 1f;
+
+        Vector2 ghostSize = _ghostRT.rect.size;
+        Vector2 selfSize = selfRT.rect.size;
+
+        if (ghostSize.x > 0.001f && ghostSize.y > 0.001f)
+        {
+            float sx = selfSize.x / ghostSize.x;
+            float sy = selfSize.y / ghostSize.y;
+            startScale = Mathf.Min(sx, sy);
+        }
+
+        _ghostRT.anchoredPosition = startLocalPos;
+        _ghostRT.localScale = new Vector3(startScale, startScale, 1f);
+
+        if (_ghostAnimRoutine != null)
+            StopCoroutine(_ghostAnimRoutine);
+
+        _ghostAnimRoutine = StartCoroutine(CoGhostLift(startLocalPos, targetLocalPos, startScale, endScale));
+    }
+
+    private IEnumerator CoGhostLift(Vector2 fromPos, Vector2 toPos, float fromScale, float toScale)
+    {
+        float t = 0f;
+
+        while (t < ghostLiftDuration)
+        {
+            t += Time.unscaledDeltaTime;
+            float k = Mathf.Clamp01(t / ghostLiftDuration);
+            k = ghostLiftCurve != null ? ghostLiftCurve.Evaluate(k) : k;
+
+            if (_ghostRT == null)
+            {
+                _ghostAnimRoutine = null;
+                yield break;
+            }
+
+            _ghostRT.anchoredPosition = Vector2.Lerp(fromPos, toPos, k);
+            float s = Mathf.Lerp(fromScale, toScale, k);
+            _ghostRT.localScale = new Vector3(s, s, 1f);
+
+            yield return null;
+        }
+
+        if (_ghostRT != null)
+        {
+            _ghostRT.anchoredPosition = toPos;
+            _ghostRT.localScale = new Vector3(toScale, toScale, 1f);
+        }
+
+        _ghostAnimRoutine = null;
     }
 }
