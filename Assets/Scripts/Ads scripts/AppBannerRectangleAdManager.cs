@@ -27,10 +27,10 @@ public class AppBannerRectangleAdManager : MonoSingleton<AppBannerRectangleAdMan
     void Start()
     {
         // Nếu bạn đã Initialize ở chỗ khác rồi thì có thể comment khối này lại
-        MobileAds.Initialize((initStatus) =>
-        {
-            LoadAndShowBanner();
-        });
+        // MobileAds.Initialize((initStatus) =>
+        // {
+        //     LoadAndShowBanner();
+        // });
     }
 
     public void CreateBannerView(/*int idx*/)

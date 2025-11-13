@@ -1,23 +1,23 @@
 # ninja log v5
-11	2059	7847260387321264	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	6e7cd390110d22ab
-30	241	7847260369187264	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	f4ed43ef1233f5f1
-241	345	7847260370187182	D:/Unity Project/Color-Jelly-Puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6h656z6r/obj/armeabi-v7a/libswappywrapper.so	177127aa544cb77
-23	1915	7847260385842108	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	e6a27c742fef07cb
-6	1618	7847260382891256	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	fc8389b2cb91fb68
-9	1622	7847260382921258	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	7f1533b4603665da
-26	1808	7847260384821909	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	4860e1f3d594f372
-20	1638	7847260383111279	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	bdf105cd0147dd0e
-15	1714	7847260383861689	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	c1f8c536cd2e741e
-18	1583	7847260382561180	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	4ac37d4fa561ccba
-2059	2133	7847260388054040	D:/Unity Project/Color-Jelly-Puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6h656z6r/obj/armeabi-v7a/libgame.so	3c2bea137293b20f
+9	2023	7847261378730870	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	6e7cd390110d22ab
 28	222	7847261360791951	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	f4ed43ef1233f5f1
+19	1900	7847261377541948	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	e6a27c742fef07cb
 222	330	7847261361842576	D:/Unity Project/Color-Jelly-Puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6h656z6r/obj/armeabi-v7a/libswappywrapper.so	177127aa544cb77
 13	1524	7847261373737224	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	fc8389b2cb91fb68
-16	1559	7847261374109817	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	4ac37d4fa561ccba
+25	1758	7847261376109148	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	4860e1f3d594f372
 6	1601	7847261374489571	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	7f1533b4603665da
 11	1688	7847261375418987	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	c1f8c536cd2e741e
 21	1698	7847261375519016	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	bdf105cd0147dd0e
-25	1758	7847261376109148	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	4860e1f3d594f372
-19	1900	7847261377541948	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	e6a27c742fef07cb
-9	2023	7847261378730870	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	6e7cd390110d22ab
+16	1559	7847261374109817	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	4ac37d4fa561ccba
 2024	2092	7847261379474715	D:/Unity Project/Color-Jelly-Puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6h656z6r/obj/armeabi-v7a/libgame.so	3c2bea137293b20f
+39	347	7847276839721474	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	f4ed43ef1233f5f1
+348	566	7847276841623950	D:/Unity Project/Color-Jelly-Puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6h656z6r/obj/armeabi-v7a/libswappywrapper.so	177127aa544cb77
+19	2058	7847276856782321	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	fc8389b2cb91fb68
+13	2083	7847276857040880	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	7f1533b4603665da
+30	2113	7847276857344483	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	4ac37d4fa561ccba
+22	2122	7847276857430097	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	bdf105cd0147dd0e
+10	2194	7847276858131453	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	c1f8c536cd2e741e
+34	2296	7847276859199905	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	4860e1f3d594f372
+26	2428	7847276860523216	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	e6a27c742fef07cb
+6	2561	7847276861838644	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	6e7cd390110d22ab
+2562	2637	7847276862608661	D:/Unity Project/Color-Jelly-Puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6h656z6r/obj/armeabi-v7a/libgame.so	3c2bea137293b20f

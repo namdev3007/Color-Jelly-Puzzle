@@ -26,10 +26,10 @@ public class AppBannerCollapseAdManager : MonoSingleton<AppBannerCollapseAdManag
     void Start()
     {
         // Nếu đã Initialize ở script khác thì có thể comment khối này.
-        MobileAds.Initialize((initStatus) =>
-        {
-            //LoadAd();
-        });
+        // MobileAds.Initialize((initStatus) =>
+        // {
+        //     //LoadAd();
+        // });
 
     }
 
