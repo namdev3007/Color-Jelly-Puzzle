@@ -269,8 +269,8 @@ PlayerSettings:
   AndroidTargetArchitectures: 3
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: C:/Users/Huy/Downloads/Telegram Desktop/blockblash.keystore
-  AndroidKeyaliasName: doannam
+  AndroidKeystoreName: D:/Unity Project/apk jelly puzzle/blockblash.keystore
+  AndroidKeyaliasName: nam
   AndroidEnableArmv9SecurityFeatures: 0
   AndroidEnableArm64MTE: 0
   AndroidBuildApkPerCpuArchitecture: 0

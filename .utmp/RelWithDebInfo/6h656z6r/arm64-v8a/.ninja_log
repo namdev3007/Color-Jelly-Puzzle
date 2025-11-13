@@ -1,12 +1,23 @@
 # ninja log v5
-32	366	7847256514271157	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	b495aabaf3e22fb6
-368	570	7847256516244435	D:/Unity Project/Color-Jelly-Puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6h656z6r/obj/arm64-v8a/libswappywrapper.so	f7f31ae899e6fde2
-11	2435	7847256534335220	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	796d0cae78b73fdb
-14	2444	7847256534985354	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	54929d02e78e873d
-21	2447	7847256535025358	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	275d33c0d40713ab
-0	2486	7847256535421092	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	d1a6df88b07ab56b
-4	2701	7847256537564604	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	a20c4188e9e6603f
-25	3047	7847256541033031	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	392084b7b32ecc53
-17	3088	7847256541458920	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	8cd3bf00e5e14f2c
-8	3223	7847256542779521	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	845d3ef74e4a8645
-3224	3343	7847256543960536	D:/Unity Project/Color-Jelly-Puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6h656z6r/obj/arm64-v8a/libgame.so	c69862a50f581bc2
+7	2169	7847260357813942	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	845d3ef74e4a8645
+33	258	7847260338758374	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	b495aabaf3e22fb6
+258	373	7847260339888641	D:/Unity Project/Color-Jelly-Puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6h656z6r/obj/arm64-v8a/libswappywrapper.so	f7f31ae899e6fde2
+22	1690	7847260353023892	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	54929d02e78e873d
+16	1688	7847260353003854	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	796d0cae78b73fdb
+19	1717	7847260353303894	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	275d33c0d40713ab
+13	1843	7847260354575660	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	a20c4188e9e6603f
+10	1700	7847260353133938	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	d1a6df88b07ab56b
+29	1866	7847260354799427	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	392084b7b32ecc53
+25	2035	7847260356487651	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	8cd3bf00e5e14f2c
+2169	2253	7847260358649459	D:/Unity Project/Color-Jelly-Puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6h656z6r/obj/arm64-v8a/libgame.so	c69862a50f581bc2
+31	243	7847261332359944	FramePacing/CMakeFiles/swappywrapper.dir/UnitySwappyWrapper.cpp.o	b495aabaf3e22fb6
+244	348	7847261333381907	D:/Unity Project/Color-Jelly-Puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6h656z6r/obj/arm64-v8a/libswappywrapper.so	f7f31ae899e6fde2
+17	1568	7847261345569241	GameActivity/CMakeFiles/game.dir/UGAInputKeyEvent.cpp.o	54929d02e78e873d
+14	1577	7847261345659257	GameActivity/CMakeFiles/game.dir/UGAEntry.cpp.o	796d0cae78b73fdb
+7	1670	7847261346590446	GameActivity/CMakeFiles/game.dir/UGAConfiguration.cpp.o	d1a6df88b07ab56b
+21	1702	7847261346917393	GameActivity/CMakeFiles/game.dir/UGAInputMotionEvent.cpp.o	275d33c0d40713ab
+10	1725	7847261347125349	GameActivity/CMakeFiles/game.dir/UGADebug.cpp.o	a20c4188e9e6603f
+27	1807	7847261347965595	GameActivity/CMakeFiles/game.dir/UGASoftKeyboard.cpp.o	392084b7b32ecc53
+24	1978	7847261349668008	GameActivity/CMakeFiles/game.dir/UGAInput.cpp.o	8cd3bf00e5e14f2c
+12	2034	7847261350232741	GameActivity/CMakeFiles/game.dir/UGAApplication.cpp.o	845d3ef74e4a8645
+2035	2104	7847261350949762	D:/Unity Project/Color-Jelly-Puzzle/Library/Bee/Android/Prj/IL2CPP/Gradle/unityLibrary/build/intermediates/cxx/RelWithDebInfo/6h656z6r/obj/arm64-v8a/libgame.so	c69862a50f581bc2
