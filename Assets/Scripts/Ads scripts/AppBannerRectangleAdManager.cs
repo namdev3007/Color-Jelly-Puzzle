@@ -122,7 +122,7 @@ public class AppBannerRectangleAdManager : MonoSingleton<AppBannerRectangleAdMan
 
                 if (AppBannerCollapseAdManager.Instance != null)
                 {
-                    AppBannerCollapseAdManager.Instance.HideBannerCollapse();
+                    AppBannerCollapseAdManager.Instance.HideBannerCollapse(); // show Rectangle thì ẩn Collapse
                 }
             }
         }
