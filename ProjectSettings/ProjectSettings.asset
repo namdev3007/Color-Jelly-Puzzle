@@ -269,7 +269,7 @@ PlayerSettings:
   AndroidTargetArchitectures: 3
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: D:/Build/Color Jelly Puzzle/blockblash.keystore
+  AndroidKeystoreName: D:/Unity Project/apk jelly puzzle/blockblash.keystore
   AndroidKeyaliasName: nam
   AndroidEnableArmv9SecurityFeatures: 0
   AndroidEnableArm64MTE: 0

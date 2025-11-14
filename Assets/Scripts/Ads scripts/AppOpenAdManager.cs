@@ -1,251 +1,169 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 using GoogleMobileAds.Api;
 using GoogleMobileAds.Common;
-using Firebase.Analytics;
-#if FIREBASE_CRASHLYTICS
-using Firebase.Crashlytics;
-#endif
 
 public class AppOpenAdManager : MonoBehaviour
 {
     public static AppOpenAdManager Instance { get; private set; }
 
 #if UNITY_ANDROID
-    private const string AD_UNIT_ID = "ca-app-pub-3940256099942544/9257395921";// Test ID
-    //private const string AD_UNIT_ID = "ca-app-pub-7775816915507213/7222058088";// ID real
+    private const string AD_UNIT_ID = "ca-app-pub-3940256099942544/9257395921";
 #elif UNITY_IOS
-    private const string AD_UNIT_ID = "ca-app-pub-7775816915507213/7222058088";
+    private const string AD_UNIT_ID = "your-ios-id";
 #else
     private const string AD_UNIT_ID = "unused";
 #endif
 
     private AppOpenAd appOpenAd;
     private DateTime loadTimeUtc;
-    private bool isLoaded;
-    private bool isShowing;
-    private bool firstShowDone;
-    private bool isLoadingAd;
 
-    void Awake()
+    private bool isShowing;
+    private bool isLoading;
+    private bool isLoaded;
+    private bool firstShown;
+
+    private void Awake()
     {
         if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
             return;
         }
+
         Instance = this;
         DontDestroyOnLoad(gameObject);
     }
 
-    void Start()
+    private void Start()
     {
-        // KHÔNG khởi tạo MobileAds ở đây
-        // Chỉ đăng ký event app state
         AppStateEventNotifier.AppStateChanged += OnAppStateChanged;
-        
-        // Load ad sẽ được gọi từ AdManager sau khi init xong
     }
 
-    private bool IsAdFresh => appOpenAd != null && isLoaded &&
-                              (DateTime.UtcNow - loadTimeUtc).TotalHours < 4.0;
+    private bool IsAdFresh =>
+        isLoaded && appOpenAd != null &&
+        (DateTime.UtcNow - loadTimeUtc).TotalHours < 4;
 
-    public void LoadAppOpenAd()
+    // ---------------------- LOAD SAFE ----------------------
+    public void LoadSafe()
     {
-        // Kiểm tra điều kiện
-        if (!AdManager.IsInitialized)
-        {
-            Debug.LogWarning("[AOA] MobileAds not initialized yet");
-            return;
-        }
+        if (!AdManager.IsInitialized) return;
+        if (isLoading) return;
+        if (appOpenAd != null) appOpenAd.Destroy();
 
-        if (!RemoteConfig.OpenAdsEnabled)
-        {
-            Debug.Log("[AOA] App Open Ads disabled via RemoteConfig");
-            return;
-        }
-
-        if (isLoadingAd)
-        {
-            Debug.Log("[AOA] Already loading...");
-            return;
-        }
-
-        if (appOpenAd != null)
-        {
-            appOpenAd.Destroy();
-            appOpenAd = null;
-        }
-
+        isLoading = true;
         isLoaded = false;
-        isLoadingAd = true;
 
-        Debug.Log("[AOA] Loading ad...");
-        
+        Debug.Log("[AOA] Loading...");
+
         var request = new AdRequest();
         AppOpenAd.Load(AD_UNIT_ID, request, (ad, error) =>
         {
-            isLoadingAd = false;
+            isLoading = false;
 
             if (error != null || ad == null)
             {
-                Debug.LogError($"[AOA] Load failed: {error}");
+                Debug.LogWarning($"[AOA] Load failed: {error}");
                 return;
             }
+
+            Debug.Log("[AOA] Loaded OK");
 
             appOpenAd = ad;
             loadTimeUtc = DateTime.UtcNow;
             isLoaded = true;
 
-            RegisterEventHandlers(ad);
-            Debug.Log("[AOA] Ad loaded successfully");
+            RegisterCallbacks(ad);
 
-            // Show lần đầu với delay
-            if (!firstShowDone)
-            {
-                Invoke(nameof(ShowOnFirstOpenSafe), 0.5f);
-            }
+            // CHỈ show lần đầu với delay lớn hơn (tránh crash)
+            if (!firstShown)
+                Invoke(nameof(ShowFirstTimeSafe), 1.0f);
         });
     }
 
-    private void ShowOnFirstOpenSafe()
+    private void ShowFirstTimeSafe()
     {
-        if (!firstShowDone && RemoteConfig.OpenAdsEnabled)
+        if (!firstShown)
         {
-            ShowAppOpenAd(reason: "first_open");
-            firstShowDone = true;
+            firstShown = true;
+            Show("first_open");
         }
     }
 
-    public void ShowAppOpenAd(string reason = "manual")
+    // ---------------------- SHOW SAFE ----------------------
+    public void Show(string reason)
     {
-        if (!AdManager.CanShowAds() || !RemoteConfig.OpenAdsEnabled)
-        {
-            Debug.Log("[AOA] Ads disabled");
-            return;
-        }
-
-        if (isShowing)
-        {
-            Debug.Log("[AOA] Already showing");
-            return;
-        }
-
-        if (!IsAdFresh)
-        {
-            Debug.Log("[AOA] Ad not ready/fresh → reload");
-            LoadAppOpenAd();
-            return;
-        }
+        if (!AdManager.CanShowAds()) return;
+        if (!IsAdFresh) { LoadAfterDelay(); return; }
+        if (isShowing) return;
 
         if (!appOpenAd.CanShowAd())
         {
-            Debug.Log("[AOA] CanShowAd=false → reload");
-            LoadAppOpenAd();
+            LoadAfterDelay();
             return;
         }
 
-        Debug.Log($"[AOA] Showing ad (reason={reason})");
-        isShowing = true;
-        
         try
         {
+            Debug.Log($"[AOA] Showing ({reason})");
+            isShowing = true;
             appOpenAd.Show();
         }
         catch (Exception e)
         {
-            Debug.LogError($"[AOA] Show failed: {e.Message}");
+            Debug.LogError($"[AOA] Show ERROR: {e.Message}");
             isShowing = false;
-            LoadAppOpenAd();
+            LoadAfterDelay();
         }
     }
 
-    private void RegisterEventHandlers(AppOpenAd ad)
+    // ---------------------- EVENT HANDLERS ----------------------
+    private void RegisterCallbacks(AppOpenAd ad)
     {
-        ad.OnAdPaid += HandlePaidEvent;
-
-        ad.OnAdImpressionRecorded += () =>
-        {
-            Debug.Log("[AOA] Impression recorded");
-        };
-
-        ad.OnAdClicked += () => Debug.Log("[AOA] Clicked");
-
         ad.OnAdFullScreenContentOpened += () =>
         {
-            Debug.Log("[AOA] Opened");
+            Debug.Log("[AOA] OPENED");
             isShowing = true;
         };
 
         ad.OnAdFullScreenContentClosed += () =>
         {
-            Debug.Log("[AOA] Closed");
+            Debug.Log("[AOA] CLOSED");
             isShowing = false;
             isLoaded = false;
-            LoadAppOpenAd();
+
+            // IMPORTANT: delay reload để tránh crash activity
+            LoadAfterDelay();
         };
 
-        ad.OnAdFullScreenContentFailed += (AdError error) =>
+        ad.OnAdFullScreenContentFailed += error =>
         {
-            Debug.LogError($"[AOA] Fullscreen failed: {error}");
+            Debug.LogWarning($"[AOA] FULLSCREEN FAIL: {error}");
             isShowing = false;
             isLoaded = false;
-            LoadAppOpenAd();
+            LoadAfterDelay();
         };
-    }
-
-    private void HandlePaidEvent(AdValue adValue)
-    {
-        Debug.Log($"[AOA] Paid: {adValue?.Value} {adValue?.CurrencyCode}");
-
-        try
-        {
-            if (adValue == null) return;
-
-            double value = adValue.Value * 0.000001d;
-            string currency = string.IsNullOrEmpty(adValue.CurrencyCode) ? "USD" : adValue.CurrencyCode;
-
-            var adParameters = new[]
-            {
-                new Parameter("ad_source", "admob"),
-                new Parameter("ad_format", "app_open"),
-                new Parameter("currency", currency),
-                new Parameter("value", value),
-            };
-            FirebaseAnalytics.LogEvent("ad_impression", adParameters);
-        }
-        catch (Exception e)
-        {
-            Debug.LogException(e);
-#if FIREBASE_CRASHLYTICS
-            Crashlytics.LogException(e);
-#endif
-        }
     }
 
     private void OnAppStateChanged(AppState state)
     {
-        if (state != AppState.Foreground) return;
-        if (!firstShowDone) return;
-
-        Invoke(nameof(TryShowOnForeground), 0.3f);
+        if (state == AppState.Foreground && firstShown)
+            Invoke(nameof(ShowForegroundSafe), 0.6f); // delay lớn → tránh crash
     }
 
-    private void TryShowOnForeground()
+    private void ShowForegroundSafe()
     {
-        if (firstShowDone && RemoteConfig.OpenAdsEnabled)
-        {
-            ShowAppOpenAd(reason: "foreground");
-        }
+        Show("foreground");
     }
 
-    void OnDestroy()
+    private void LoadAfterDelay()
+    {
+        Invoke(nameof(LoadSafe), 1.0f);
+    }
+
+    private void OnDestroy()
     {
         AppStateEventNotifier.AppStateChanged -= OnAppStateChanged;
-        if (appOpenAd != null)
-        {
-            appOpenAd.Destroy();
-        }
+        appOpenAd?.Destroy();
     }
 }

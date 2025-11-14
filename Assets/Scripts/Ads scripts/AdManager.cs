@@ -118,8 +118,9 @@ public class AdManager : MonoBehaviour
         if (RemoteConfig.OpenAdsEnabled && AppOpenAdManager.Instance != null)
         {
             LogDebug("Loading App Open Ad...");
-            AppOpenAdManager.Instance.LoadAppOpenAd();
+            AppOpenAdManager.Instance.LoadSafe();
         }
+
         
         // Load Interstitial Ad
         if (AppInterstitialAdManager_Admob_For_Play.Instance != null)
@@ -163,16 +164,16 @@ public class AdManager : MonoBehaviour
         }
     }
     
-    void OnApplicationQuit()
-    {
-        // Cleanup khi thoát app
-        if (AppOpenAdManager.Instance != null)
-        {
-            Destroy(AppOpenAdManager.Instance.gameObject);
-        }
-        if (AppInterstitialAdManager_Admob_For_Play.Instance != null)
-        {
-            Destroy(AppInterstitialAdManager_Admob_For_Play.Instance.gameObject);
-        }
-    }
+    // void OnApplicationQuit()
+    // {
+    //     // Cleanup khi thoát app
+    //     if (AppOpenAdManager.Instance != null)
+    //     {
+    //         Destroy(AppOpenAdManager.Instance.gameObject);
+    //     }
+    //     if (AppInterstitialAdManager_Admob_For_Play.Instance != null)
+    //     {
+    //         Destroy(AppInterstitialAdManager_Admob_For_Play.Instance.gameObject);
+    //     }
+    // }
 }
